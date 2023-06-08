@@ -5,12 +5,9 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { fetchImages } from './helpers/fetch';
 
 export class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      images: [],
-    };
-  }
+  state = {
+    images: [],
+  };
 
   handleSearch = async searchQuery => {
     try {
