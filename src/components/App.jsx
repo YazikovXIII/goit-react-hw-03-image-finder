@@ -15,6 +15,7 @@ export class App extends React.Component {
     isEmpty: false,
     isLoading: false,
     isShowButton: false,
+    total: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -46,6 +47,7 @@ export class App extends React.Component {
           images: fetchedImages,
           isShowButton: page < Math.ceil(totalHits / per_page),
           isLoading: false,
+          total: totalHits,
         });
       } else {
         this.setState(prevState => ({
@@ -66,8 +68,8 @@ export class App extends React.Component {
   };
 
   render() {
-    const { images, isEmpty, isLoading, error, isShowButton } = this.state;
-
+    const { images, isEmpty, isLoading, error, isShowButton, total } =
+      this.state;
     return (
       <Container>
         <Searchbar onSearch={this.handleSearch} />
@@ -80,6 +82,7 @@ export class App extends React.Component {
             Load More
           </LoadMoreButton>
         )}
+        {total === images.length && <p>That's all,folks!</p>}
       </Container>
     );
   }
