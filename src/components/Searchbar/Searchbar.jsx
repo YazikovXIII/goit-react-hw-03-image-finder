@@ -6,7 +6,6 @@ export class Searchbar extends React.Component {
   handleSubmit = (values, { setSubmitting }) => {
     this.props.onSearch(values.searchQuery);
     setSubmitting(false);
-    console.log('values', values);
   };
 
   render() {

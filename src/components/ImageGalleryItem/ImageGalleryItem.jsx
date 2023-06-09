@@ -4,7 +4,6 @@ import { StyledGalleryItem } from './ImageGalleryItem.styled';
 export class ImageGalleryItem extends React.Component {
   render() {
     const { images } = this.props;
-    console.log(images);
 
     return (
       <>
