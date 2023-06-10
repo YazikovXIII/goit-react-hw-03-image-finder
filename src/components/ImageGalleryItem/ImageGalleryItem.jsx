@@ -3,7 +3,7 @@ import { StyledGalleryItem } from './ImageGalleryItem.styled';
 
 export class ImageGalleryItem extends React.Component {
   render() {
-    const { images } = this.props;
+    const { images, modalOnShow } = this.props;
 
     return (
       <>
@@ -14,7 +14,8 @@ export class ImageGalleryItem extends React.Component {
               alt={image.tags}
               width="200px"
               height="140px"
-              onClick={this.handleImageClick}
+              data-url={image.largeImageURL}
+              onClick={modalOnShow}
             />
           </StyledGalleryItem>
         ))}

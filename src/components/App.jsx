@@ -6,6 +6,8 @@ import { fetchImages } from './helpers/fetch';
 import { BtnContainer } from './styled/ContainerBtn.styled';
 import { LoadMoreButton } from './Button/Button';
 import { Loader } from './Loader/Loader';
+import { Modal } from './Modal/Modal';
+import { StyledImg } from './styled/App.styled';
 
 export class App extends React.Component {
   state = {
@@ -18,6 +20,8 @@ export class App extends React.Component {
     isLoading: false,
     isShowButton: false,
     total: null,
+    showModal: false,
+    imgModal: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -75,13 +79,35 @@ export class App extends React.Component {
     }));
   };
 
+  openModal = e => {
+    this.setState({ imgModal: e.target.dataset.url });
+    this.toggleModal();
+  };
+
+  toggleModal = () => {
+    this.setState({ showModal: !this.state.showModal });
+  };
+
   render() {
-    const { images, isEmpty, isLoading, error, isShowButton, total } =
-      this.state;
+    const {
+      images,
+      isEmpty,
+      isLoading,
+      error,
+      isShowButton,
+      total,
+      showModal,
+      imgModal,
+    } = this.state;
     return (
       <Container>
         <Searchbar onSearch={this.handleSearch} />
-        <ImageGallery images={images} />
+        <ImageGallery images={images} modalOnShow={this.openModal} />
+        {showModal && (
+          <Modal modalHide={this.toggleModal}>
+            <StyledImg src={imgModal} alt="Ooops!"></StyledImg>
+          </Modal>
+        )}
         {isEmpty && <p>Sorry. There are no images ... 😭</p>}
         {isLoading && <Loader />}
         {error && <p>{error}</p>}
