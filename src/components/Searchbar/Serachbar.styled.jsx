@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { Field } from 'formik';
 
 export const SearchWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 10px;
+  right: 10px;
   display: block;
   margin-top: 10px;
   background-color: #4f60df;

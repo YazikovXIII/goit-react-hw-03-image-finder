@@ -3,7 +3,9 @@ import { Container } from './styled/Container.styled';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { fetchImages } from './helpers/fetch';
+import { BtnContainer } from './styled/ContainerBtn.styled';
 import { LoadMoreButton } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 export class App extends React.Component {
   state = {
@@ -31,8 +33,13 @@ export class App extends React.Component {
   }
 
   handleSearch = async searchQuery => {
+    if (!searchQuery) {
+      this.setState({ error: 'There is nothing in the search field' });
+      return;
+    }
+
     const { page, per_page } = this.state;
-    this.setState({ query: searchQuery, isLoading: true });
+    this.setState({ query: searchQuery, isLoading: true, error: null });
     try {
       const response = await fetchImages(searchQuery, page);
       const fetchedImages = response.data.hits;
@@ -75,12 +82,14 @@ export class App extends React.Component {
         <Searchbar onSearch={this.handleSearch} />
         <ImageGallery images={images} />
         {isEmpty && <p>Sorry. There are no images ... 😭</p>}
-        {isLoading && <p>Loading ...</p>}
+        {isLoading && <Loader />}
         {error && <p>{error}</p>}
         {isShowButton && (
-          <LoadMoreButton onClick={this.handleClickBtn}>
-            Load More
-          </LoadMoreButton>
+          <BtnContainer>
+            <LoadMoreButton onClick={this.handleClickBtn}>
+              Load More...
+            </LoadMoreButton>
+          </BtnContainer>
         )}
         {total === images.length && <p>That's all,folks!</p>}
       </Container>

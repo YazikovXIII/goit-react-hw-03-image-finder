@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const GalleryList = styled.ul`
   margin: 0;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 60px;
+  margin-bottom: 10px;
   padding: 0;
   padding: 0 10px;
   list-style: none;
