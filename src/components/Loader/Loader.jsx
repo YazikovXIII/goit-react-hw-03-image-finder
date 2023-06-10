@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Audio } from 'react-loader-spinner';
+import { Audio, InfinitySpin } from 'react-loader-spinner';
 
 const StyledAudioWrapper = styled.div`
   position: fixed;
@@ -19,14 +19,15 @@ const StyledAudioWrapper = styled.div`
 export const Loader = () => {
   return (
     <StyledAudioWrapper className="audiowrapper">
-      <Audio
+      {/* <Audio
         height="80"
         width="80"
         radius="9"
         color="green"
         ariaLabel="three-dots-loading"
         wrapperClass="audiowrapper"
-      />
+      /> */}
+      <InfinitySpin width="200" color="#4fa94d" />
     </StyledAudioWrapper>
   );
 };
