@@ -33,12 +33,13 @@ export class App extends React.Component {
   }
 
   handleSearch = async searchQuery => {
+    const { page, per_page } = this.state;
+
     if (!searchQuery) {
       this.setState({ error: 'There is nothing in the search field' });
       return;
     }
 
-    const { page, per_page } = this.state;
     this.setState({ query: searchQuery, isLoading: true, error: null });
     try {
       const response = await fetchImages(searchQuery, page);

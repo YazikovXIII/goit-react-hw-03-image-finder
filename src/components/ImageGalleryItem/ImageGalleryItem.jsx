@@ -14,6 +14,7 @@ export class ImageGalleryItem extends React.Component {
               alt={image.tags}
               width="200px"
               height="140px"
+              onClick={this.handleImageClick}
             />
           </StyledGalleryItem>
         ))}
