@@ -1,35 +1,40 @@
 import React from 'react';
 import { SearchWrapper, StyledField } from './Serachbar.styled';
-import { Formik, Form } from 'formik';
 
 export class Searchbar extends React.Component {
-  handleSubmit = (values, { setSubmitting }) => {
-    this.props.onSearch(values.searchQuery);
-    setSubmitting(false);
+  state = {
+    value: '',
+  };
+
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.onSubmit(this.state.value);
+    this.setState({ value: '' });
   };
 
   render() {
+    const { value } = this.state;
     return (
       <SearchWrapper>
-        <Formik
-          initialValues={{ searchQuery: '' }}
-          onSubmit={this.handleSubmit}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <div className="input_wrapper">
-                <StyledField type="text" name="searchQuery" />
-                <button
-                  className="input_button"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  Search
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
+        <form onSubmit={this.handleSubmit}>
+          <div className="input_wrapper">
+            <StyledField
+              type="text"
+              name="search"
+              onChange={this.handleChange}
+              required
+              autoFocus
+              value={value}
+            />
+            <button className="input_button" type="submit">
+              Search
+            </button>
+          </div>
+        </form>
       </SearchWrapper>
     );
   }

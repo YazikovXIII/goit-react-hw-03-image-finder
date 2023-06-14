@@ -7,7 +7,7 @@ import { BtnContainer } from './styled/ContainerBtn.styled';
 import { LoadMoreButton } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
-import { StyledImg } from './styled/App.styled';
+import { StyledImg, StyledPar } from './styled/App.styled';
 
 export class App extends React.Component {
   state = {
@@ -26,50 +26,42 @@ export class App extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
-
-    if (prevState.query !== query) {
-      this.setState({ images: [], page: 1, isEmpty: false }, () => {
-        this.handleSearch(query, this.state.page);
-      });
-    } else if (prevState.page !== page) {
-      this.handleSearch(query, page);
+    if (prevState.query !== query || prevState.page !== page) {
+      this.getImages(query, page);
     }
   }
 
-  handleSearch = async searchQuery => {
-    const { page, per_page } = this.state;
+  handleSubmit = value => {
+    this.setState({
+      query: value,
+      page: 1,
+      images: [],
+      error: null,
+      isEmpty: false,
+      isShowButton: false,
+    });
+  };
 
-    if (!searchQuery) {
-      this.setState({ error: 'There is nothing in the search field' });
-      return;
-    }
-
-    this.setState({ query: searchQuery, isLoading: true, error: null });
+  getImages = async (query, page) => {
+    const { per_page } = this.state;
+    this.setState({ isLoading: true });
     try {
-      const response = await fetchImages(searchQuery, page);
-      const fetchedImages = response.data.hits;
-      const { totalHits } = response.data;
+      const response = await fetchImages(query, page);
+      const { hits, totalHits } = response.data;
 
-      if (page === 1) {
-        if (!fetchedImages.length) {
-          this.setState({ isEmpty: true, isLoading: false });
-          return;
-        }
-        this.setState({
-          images: fetchedImages,
-          isShowButton: page < Math.ceil(totalHits / per_page),
-          isLoading: false,
-          total: totalHits,
-        });
-      } else {
-        this.setState(prevState => ({
-          images: [...prevState.images, ...fetchedImages],
-          isShowButton: page < Math.ceil(totalHits / per_page),
-          isLoading: false,
-        }));
+      if (!totalHits) {
+        this.setState({ isEmpty: true });
+        return;
       }
+      this.setState(prevState => ({
+        images: [...prevState.images, ...hits],
+        total: totalHits,
+        isShowButton: page < Math.ceil(totalHits / per_page),
+      }));
     } catch (error) {
-      console.error('Error fetching images:', error);
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
 
@@ -101,16 +93,16 @@ export class App extends React.Component {
     } = this.state;
     return (
       <Container>
-        <Searchbar onSearch={this.handleSearch} />
+        <Searchbar onSubmit={this.handleSubmit} />
         <ImageGallery images={images} modalOnShow={this.openModal} />
         {showModal && (
           <Modal modalHide={this.toggleModal}>
             <StyledImg src={imgModal} alt="Ooops!"></StyledImg>
           </Modal>
         )}
-        {isEmpty && <p>Sorry. There are no images ... 😭</p>}
+        {isEmpty && <StyledPar>Sorry. There are no images ... 😭</StyledPar>}
         {isLoading && <Loader />}
-        {error && <p>{error}</p>}
+        {error && <StyledPar>{error}</StyledPar>}
         {isShowButton && (
           <BtnContainer>
             <LoadMoreButton onClick={this.handleClickBtn}>
@@ -118,7 +110,7 @@ export class App extends React.Component {
             </LoadMoreButton>
           </BtnContainer>
         )}
-        {total === images.length && <p>That's all,folks!</p>}
+        {total === images.length && <StyledPar>That's all,folks!</StyledPar>}
       </Container>
     );
   }

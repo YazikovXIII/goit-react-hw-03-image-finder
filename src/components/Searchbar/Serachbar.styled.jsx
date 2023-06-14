@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Field } from 'formik';
 
 export const SearchWrapper = styled.div`
   position: fixed;
@@ -26,7 +25,7 @@ export const SearchWrapper = styled.div`
   }
 `;
 
-export const StyledField = styled(Field)`
+export const StyledField = styled.input`
   width: 100%;
   padding-left: 60px;
 `;
